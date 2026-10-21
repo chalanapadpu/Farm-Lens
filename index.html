@@ -6,40 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0b0d17">
     <meta name="description"
-        content="FoodLens AI compares food delivery prices, estimated costs, ratings and review insights.">
-    <title>FoodLens AI — Smart Food Intelligence</title>
+        content="FarmLens AI connects farmers directly with buyers, helping farmers list produce and buyers discover fresh crops at transparent prices.">
+    <title>FarmLens AI — Direct Market Access for Farmers</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div class="app-shell">
+
         <aside class="sidebar">
             <a class="brand" href="#home">
                 <span class="brand-icon">F</span>
-                <span>FoodLens<span class="brand-ai">.AI</span></span>
+                <span>FarmLens<span class="brand-ai">.AI</span></span>
             </a>
 
             <p class="nav-label">WORKSPACE</p>
             <nav class="side-nav">
                 <a class="nav-link active" href="#home"><span>◈</span> Overview</a>
-                <a class="nav-link" href="#compare"><span>⌕</span> Price Explorer</a>
-                <a class="nav-link" href="#reviews"><span>✳</span> Review Insights</a>
+                <a class="nav-link" href="#marketplace"><span>⌕</span> Marketplace</a>
+                <a class="nav-link" href="#sell"><span>＋</span> Sell Produce</a>
             </nav>
 
             <div class="sidebar-bottom">
                 <div class="status-dot"></div>
                 <div>
                     <strong>Prototype mode</strong>
-                    <p>Demo data enabled</p>
+                    <p>Demo listings enabled</p>
                 </div>
             </div>
         </aside>
 
         <main class="main-content" id="home">
+
             <header class="topbar">
                 <div>
-                    <p class="eyebrow">FOOD INTELLIGENCE PLATFORM</p>
-                    <h1>Discover smarter choices<span class="accent">.</span></h1>
+                    <p class="eyebrow">DIRECT FARM-TO-BUYER PLATFORM</p>
+                    <h1>Fresh produce. Fair prices<span class="accent">.</span></h1>
                 </div>
                 <div class="topbar-right">
                     <span class="live-pill"><span></span> DEMO ENVIRONMENT</span>
@@ -49,120 +51,195 @@
 
             <section class="hero-panel">
                 <div class="hero-copy">
-                    <span class="hero-tag">✦ YOUR AI FOOD COMPANION</span>
-                    <h2>Your cravings.<br>Our <span>intelligence.</span></h2>
+                    <span class="hero-tag">✦ FARMER-FIRST MARKETPLACE</span>
+                    <h2>From the farm<br>to <span>your table.</span></h2>
                     <p>
-                        Compare food prices across platforms, discover
-                        better-value options and explore review insights
-                        — all from one place.
+                        Help farmers connect directly with buyers.
+                        Discover fresh produce, compare listed prices
+                        and reduce dependence on middlemen.
                     </p>
-                    <a href="#compare" class="primary-button">Explore food prices <span>↗</span></a>
+                    <a href="#marketplace" class="primary-button">
+                        Explore marketplace <span>↗</span>
+                    </a>
                 </div>
+
                 <div class="hero-visual" aria-hidden="true">
                     <div class="orbit orbit-one"></div>
                     <div class="orbit orbit-two"></div>
                     <div class="hero-glow"></div>
-                    <div class="hero-food">🍜</div>
-                    <div class="floating-chip chip-top">✦ Smart comparison</div>
-                    <div class="floating-chip chip-bottom"><span>↘</span> Find better value</div>
+                    <div class="hero-food">🌾</div>
+                    <div class="floating-chip chip-top">✦ Direct connections</div>
+                    <div class="floating-chip chip-bottom">
+                        <span>↗</span> Fair-price discovery
+                    </div>
                 </div>
             </section>
 
-            <section class="stats-grid" aria-label="Demo overview">
+            <section class="stats-grid" aria-label="Marketplace overview">
                 <article class="stat-card">
-                    <div class="stat-top"><span>FOOD OPTIONS</span><span class="stat-icon purple">◇</span></div>
-                    <p class="stat-number" id="foodCount">06</p>
-                    <p class="stat-caption">Sample menu items</p>
+                    <div class="stat-top">
+                        <span>PRODUCE LISTINGS</span>
+                        <span class="stat-icon purple">◇</span>
+                    </div>
+                    <p class="stat-number" id="produceCount">06</p>
+                    <p class="stat-caption">Available demo listings</p>
                 </article>
+
                 <article class="stat-card">
-                    <div class="stat-top"><span>PLATFORMS</span><span class="stat-icon green">⇄</span></div>
-                    <p class="stat-number">02</p>
-                    <p class="stat-caption">Swiggy &amp; Zomato</p>
+                    <div class="stat-top">
+                        <span>PRODUCT CATEGORIES</span>
+                        <span class="stat-icon green">⇄</span>
+                    </div>
+                    <p class="stat-number">04</p>
+                    <p class="stat-caption">Explore different crops</p>
                 </article>
+
                 <article class="stat-card">
-                    <div class="stat-top"><span>REVIEW SIGNALS</span><span class="stat-icon orange">✳</span></div>
-                    <p class="stat-number">AI <span class="mini-text">ready</span></p>
-                    <p class="stat-caption">Insight feature prototype</p>
+                    <div class="stat-top">
+                        <span>MARKET ACCESS</span>
+                        <span class="stat-icon orange">✳</span>
+                    </div>
+                    <p class="stat-number">Direct</p>
+                    <p class="stat-caption">Farmer-to-buyer concept</p>
                 </article>
             </section>
 
-            <section class="compare-section" id="compare">
+            <section class="compare-section" id="marketplace">
                 <div class="section-heading">
                     <div>
-                        <p class="eyebrow">EXPLORE &amp; COMPARE</p>
-                        <h2>Find your next favourite<span class="accent">.</span></h2>
-                        <p class="section-subtitle">Compare illustrative prices and estimated fees in one view.</p>
+                        <p class="eyebrow">DISCOVER LOCAL PRODUCE</p>
+                        <h2>Explore the marketplace<span class="accent">.</span></h2>
+                        <p class="section-subtitle">
+                            Find produce, explore listed prices and connect with sellers.
+                        </p>
                     </div>
-                    <span class="results-label" id="resultsLabel">06 OPTIONS</span>
+                    <span class="results-label" id="resultsLabel">06 LISTINGS</span>
                 </div>
 
                 <div class="control-panel">
                     <div class="search-box">
                         <span>⌕</span>
-                        <input id="searchInput" type="search" placeholder="Search biryani, pizza, restaurant..."
-                            aria-label="Search food or restaurant">
+                        <input id="searchInput" type="search" placeholder="Search tomatoes, rice, mangoes..."
+                            aria-label="Search produce, farmer or location">
                         <button id="clearSearch" type="button" aria-label="Clear search">×</button>
                     </div>
 
+                    <label class="sort-control">
+                        <span>Category</span>
+                        <select id="categoryFilter" aria-label="Filter by category">
+                            <option value="all">All categories</option>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                            <option value="grains">Grains</option>
+                            <option value="others">Other produce</option>
+                        </select>
+                    </label>
+
+                    <label class="sort-control">
+                        <span>Location</span>
+                        <select id="locationFilter" aria-label="Filter by location">
+                            <option value="all">All locations</option>
+                        </select>
+                    </label>
+
+                    <label class="sort-control">
+                        <span>Sort by</span>
+                        <select id="sortSelect" aria-label="Sort produce">
+                            <option value="low">Lowest price</option>
+                            <option value="high">Highest price</option>
+                        </select>
+                    </label>
                 </div>
-                <label class="sort-control">
-                    <span>Budget</span>
-                    <select id="budgetFilter" aria-label="Filter by budget">
-                        <option value="all">All budgets</option>
-                        <option value="100">Under ₹100</option>
-                        <option value="150">Under ₹150</option>
-                        <option value="200">Under ₹200</option>
-                    </select>
-                </label>
+
+                <div class="savings-overview">
+                    <span>Direct-market pricing</span>
+                    <strong>Farm to buyer</strong>
+                    <small>Prices shown are illustrative demo data.</small>
+                </div>
+
+                <div class="food-grid" id="foodContainer" aria-live="polite"></div>
+
+                <p class="demo-note">
+                    ⓘ Demo listings and prices are illustrative. This prototype
+                    does not yet provide verified market prices or live transactions.
+                </p>
+            </section>
+
+            <section class="insights-panel" id="sell">
+                <div class="insight-symbol">🌱</div>
+                <div class="insight-copy">
+                    <p class="eyebrow">FOR FARMERS</p>
+                    <h2>Bring your harvest to the market.</h2>
+                    <p>
+                        Add your produce, set your asking price and share your
+                        location so potential buyers can discover your listing.
+                    </p>
+
+                    <form id="farmerForm">
+                        <label for="produceName">Produce name</label>
+                        <input id="produceName" name="produceName" type="text" placeholder="e.g. Tomatoes" required>
+
+                        <label for="farmerName">Farmer name</label>
+                        <input id="farmerName" name="farmerName" type="text" placeholder="Enter farmer name" required>
+
+                        <label for="produceCategory">Category</label>
+                        <select id="produceCategory" name="produceCategory" required>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                            <option value="grains">Grains</option>
+                            <option value="others">Other produce</option>
+                        </select>
+
+                        <label for="producePrice">Price per kg (₹)</label>
+                        <input id="producePrice" name="producePrice" type="number" min="1" step="0.01"
+                            placeholder="e.g. 30" required>
+
+                        <label for="produceQuantity">Available quantity (kg)</label>
+                        <input id="produceQuantity" name="produceQuantity" type="number" min="1" step="0.1"
+                            placeholder="e.g. 100" required>
+
+                        <label for="farmerLocation">Location</label>
+                        <input id="farmerLocation" name="farmerLocation" type="text" placeholder="Village or town"
+                            required>
+
+                        <div class="form-group">
+                            <label for="farmerPhone">Contact Number</label>
+                            <input type="tel" id="farmerPhone" name="farmerPhone" placeholder="e.g. 9876543210"
+                                pattern="[6-9][0-9]{9}" maxlength="10" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="farmerVillage">Village / Town</label>
+                            <input type="text" id="farmerVillage" name="farmerVillage"
+                                placeholder="Enter village or town" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="farmerDistrict">District</label>
+                            <input type="text" id="farmerDistrict" name="farmerDistrict" placeholder="Enter district"
+                                required>
+                        </div>
 
 
+                        <label for="produceDescription">Description</label>
+                        <textarea id="produceDescription" name="produceDescription" rows="3"
+                            placeholder="Freshness, harvest date or other details"></textarea>
 
-                <label class="sort-control">
-                    <span>Sort by</span>
-                    <select id="sortSelect">
-                        <option value="low">Lowest total price</option>
-                        <option value="high">Highest total price</option>
-                        <option value="rating">Highest rated</option>
-                    </select>
-                </label>
+                        <button class="primary-button" type="submit">
+                            List your produce ↗
+                        </button>
+                    </form>
+                </div>
+            </section>
 
+            <footer class="footer">
+                <a class="footer-brand" href="#home">FarmLens<span>.AI</span></a>
+                <p>Connecting farmers. Empowering buyers.</p>
+                <p class="footer-disclaimer">Hackathon prototype · Sample data only</p>
+            </footer>
+
+        </main>
     </div>
-    <div class="savings-overview">
-        <span>Potential savings across displayed dishes</span>
-        <strong id="totalSavings">₹0</strong>
-        <small>Illustrative prices and fees only</small>
-    </div>
-
-
-    <div class="food-grid" id="foodContainer" aria-live="polite"></div>
-    <p class="demo-note">ⓘ All prices, fees, ratings and review text are illustrative demo data, not live
-        platform information.</p>
-    </section>
-
-    <section class="insights-panel" id="reviews">
-        <div class="insight-symbol">✳</div>
-        <div class="insight-copy">
-            <p class="eyebrow">BEYOND THE PRICE TAG</p>
-            <h2>Every choice has a story.</h2>
-            <p>Explore review themes alongside prices and ratings. The current prototype uses example insights;
-                real review analysis can be added with authorized data.</p>
-        </div>
-        <a href="#compare" class="secondary-button">Explore insights ↗</a>
-    </section>
-
-    <footer class="footer">
-        <a class="footer-brand" href="#home">FoodLens<span>.AI</span></a>
-        <p>Compare smarter. Eat happier.</p>
-        <p class="footer-disclaimer">Hackathon prototype · Sample data only</p>
-    </footer>
-    </main>
-    </div>
-    <select id="budgetFilter" aria-label="Filter by budget">
-        <option value="all">All budgets</option>
-        <option value="100">Under ₹100</option>
-        <option value="150">Under ₹150</option>
-        <option value="200">Under ₹200</option>
-    </select>
 
     <script src="app.js"></script>
 </body>

@@ -1,197 +1,571 @@
 
-const foods = [
-    { name: "Chicken Biryani", restaurant: "Spice Route Kitchen", category: "Biryani", emoji: "🍛", rating: 4.5, swiggy: 189, swiggyFee: 28, zomato: 205, zomatoFee: 24, review: "Example review insight: flavour and portion size." },
-    { name: "Margherita Pizza", restaurant: "The Pizza Studio", category: "Pizza", emoji: "🍕", rating: 4.3, swiggy: 229, swiggyFee: 25, zomato: 215, zomatoFee: 32, review: "Example review insight: cheese topping and crisp crust." },
-    { name: "Classic Veg Burger", restaurant: "Burger Barn", category: "Burger", emoji: "🍔", rating: 4.1, swiggy: 119, swiggyFee: 20, zomato: 109, zomatoFee: 25, review: "Example review insight: price and convenience." },
-    { name: "Masala Dosa", restaurant: "Coastal Tiffin House", category: "South Indian", emoji: "🥞", rating: 4.6, swiggy: 85, swiggyFee: 18, zomato: 92, zomatoFee: 16, review: "Example review insight: crisp texture and chutney." },
-    { name: "Paneer Biryani", restaurant: "Spice Route Kitchen", category: "Biryani", emoji: "🍲", rating: 4.2, swiggy: 169, swiggyFee: 26, zomato: 155, zomatoFee: 29, review: "Example review insight: flavour and paneer texture." },
-    { name: "Farmhouse Pizza", restaurant: "The Pizza Studio", category: "Pizza", emoji: "🍕", rating: 4.4, swiggy: 299, swiggyFee: 30, zomato: 279, zomatoFee: 35, review: "Example review insight: vegetable toppings and variety." }
+"use strict";
+
+// ------------------------------------
+// 1. Demo produce listings
+// ------------------------------------
+
+const initialProduce = [
+    {
+        id: 1,
+        name: "Fresh Tomatoes",
+        farmer: "Demo Farmer 1",
+        category: "Vegetables",
+        emoji: "🍅",
+        price: 30,
+        quantity: 50,
+        location: "Mangaluru",
+        description: "Freshly harvested tomatoes."
+    },
+    {
+        id: 2,
+        name: "Organic Bananas",
+        farmer: "Demo Farmer 2",
+        category: "Fruits",
+        emoji: "🍌",
+        price: 45,
+        quantity: 35,
+        location: "Udupi",
+        description: "Ripe bananas from a demo farm."
+    },
+    {
+        id: 3,
+        name: "Fresh Green Chillies",
+        farmer: "Demo Farmer 3",
+        category: "Vegetables",
+        emoji: "🌶️",
+        price: 60,
+        quantity: 20,
+        location: "Sullia",
+        description: "Fresh green chillies."
+    },
+    {
+        id: 4,
+        name: "Raw Rice",
+        farmer: "Demo Farmer 4",
+        category: "Grains",
+        emoji: "🌾",
+        price: 40,
+        quantity: 100,
+        location: "Puttur",
+        description: "Rice available for bulk enquiries."
+    },
+    {
+        id: 5,
+        name: "Fresh Coconuts",
+        farmer: "Demo Farmer 5",
+        category: "Other",
+        emoji: "🥥",
+        price: 25,
+        quantity: 80,
+        location: "Mangaluru",
+        description: "Fresh coconuts from a demo listing."
+    },
+    {
+        id: 6,
+        name: "Sweet Mangoes",
+        farmer: "Demo Farmer 6",
+        category: "Fruits",
+        emoji: "🥭",
+        price: 70,
+        quantity: 25,
+        location: "Udupi",
+        description: "Seasonal mangoes in this demo."
+    }
 ];
 
-const searchInput = document.getElementById("searchInput");
-const searchButton = document.getElementById("clearSearch");
-const sortSelect = document.getElementById("sortSelect");
-const budgetFilter = document.getElementById("budgetFilter");
-const foodContainer = document.getElementById("foodContainer");
-const resultsLabel = document.getElementById("resultsLabel");
-const foodCount = document.getElementById("foodCount");
+const STORAGE_KEY = "farmlens-produce";
 
-function totalCost(food, platform) {
-    return food[platform] + food[platform + "Fee"];
-}
+// ------------------------------------
+// 2. Load and save produce listings
+// ------------------------------------
 
-function formatPrice(amount) {
-    return "₹" + amount.toLocaleString("en-IN");
-}
+function loadProduce() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
 
-function getBestPlatform(food) {
-    const swiggyTotal = totalCost(food, "swiggy");
-    const zomatoTotal = totalCost(food, "zomato");
+        if (saved !== null) {
+            const parsed = JSON.parse(saved);
 
-    if (swiggyTotal <= zomatoTotal) {
-        return {
-            name: "Swiggy",
-            total: swiggyTotal,
-            savings: zomatoTotal - swiggyTotal
-        };
+            if (Array.isArray(parsed)) {
+                return parsed;
+            }
+        }
+    } catch (error) {
+        console.error("Could not load saved listings:", error);
     }
 
-    return {
-        name: "Zomato",
-        total: zomatoTotal,
-        savings: swiggyTotal - zomatoTotal
-    };
+    return initialProduce.map(item => ({ ...item }));
 }
 
-function createFoodCard(food) {
-    const best = getBestPlatform(food);
+let produce = loadProduce();
+
+function saveProduce() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(produce));
+        return true;
+    } catch (error) {
+        console.error("Could not save listings:", error);
+        alert("Your listing could not be saved in this browser.");
+        return false;
+    }
+}
+
+// ------------------------------------
+// 3. Connect JavaScript to HTML
+// ------------------------------------
+
+const searchInput = document.getElementById("searchInput");
+const clearSearch = document.getElementById("clearSearch");
+const sortSelect = document.getElementById("sortSelect");
+const categoryFilter = document.getElementById("categoryFilter");
+const locationFilter = document.getElementById("locationFilter");
+
+const produceContainer = document.getElementById("foodContainer");
+const resultsLabel = document.getElementById("resultsLabel");
+const produceCount = document.getElementById("produceCount");
+
+const farmerForm = document.getElementById("farmerForm");
+
+// ------------------------------------
+// 4. Helper functions
+// ------------------------------------
+
+function formatPrice(amount) {
+    const price = Number(amount);
+
+    if (!Number.isFinite(price)) {
+        return "₹0";
+    }
+
+    return "₹" + price.toLocaleString("en-IN", {
+        maximumFractionDigits: 2
+    });
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => {
+        const entities = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        };
+
+        return entities[character];
+    });
+}
+
+function normalizeCategory(value) {
+    const category = String(value ?? "").trim().toLowerCase();
+
+    const aliases = {
+        vegetable: "vegetables",
+        vegetables: "vegetables",
+        fruit: "fruits",
+        fruits: "fruits",
+        grain: "grains",
+        grains: "grains",
+        other: "others",
+        others: "others"
+    };
+
+    return aliases[category] || category;
+}
+
+function getEmoji(category) {
+    const emojis = {
+        vegetables: "🥬",
+        fruits: "🍎",
+        grains: "🌾",
+        others: "🌱"
+    };
+
+    return emojis[normalizeCategory(category)] || "🌱";
+}
+
+// ------------------------------------
+// 5. Update the location dropdown
+// ------------------------------------
+
+function updateLocationOptions() {
+    if (!locationFilter) return;
+
+    const previousValue = locationFilter.value;
+
+    const locations = [
+        ...new Set(
+            produce
+                .map(item => String(item.location ?? "").trim())
+                .filter(Boolean)
+        )
+    ].sort((a, b) => a.localeCompare(b));
+
+    locationFilter.innerHTML =
+        '<option value="all">All locations</option>';
+
+    locations.forEach(location => {
+        const option = document.createElement("option");
+
+        option.value = location;
+        option.textContent = location;
+
+        locationFilter.appendChild(option);
+    });
+
+    if (locations.includes(previousValue)) {
+        locationFilter.value = previousValue;
+    } else {
+        locationFilter.value = "all";
+    }
+}
+
+// ------------------------------------
+// 6. Create a produce card
+// ------------------------------------
+
+
+function createProduceCard(item) {
+    const phone = String(item.phone || item.farmerPhone || "")
+        .replace(/\D/g, "")
+        .replace(/^0/, "");
+
+    const validPhone = /^[6-9]\d{9}$/.test(phone);
+
+    const locationDetails = [
+        item.village || item.farmerVillage || item.location,
+        item.district || item.farmerDistrict
+    ].filter(Boolean).join(", ");
+
+    const whatsappNumber = validPhone ? `91${phone}` : "";
 
     return `
         <article class="food-card">
             <div class="food-card-head">
-                <div class="food-emoji">${food.emoji}</div>
-                <span class="best-badge">
-                    ✦ ${best.savings === 0 ? "EQUAL PRICE" : "BEST VALUE: " + best.name}
-                </span>
+                <div class="food-emoji" aria-hidden="true">
+                    ${escapeHTML(item.emoji || getEmoji(item.category))}
+                </div>
+
+                <span class="best-badge">DIRECT FROM FARM</span>
             </div>
 
-            <h3>${food.name}</h3>
-            <p class="restaurant">${food.restaurant} · ${food.category}</p>
+            <h3>${escapeHTML(item.name)}</h3>
+
+            <p class="restaurant">
+                ${escapeHTML(item.farmer)} ·
+                ${escapeHTML(item.category)}
+            </p>
+
             <p class="rating">
-                ★ ${food.rating.toFixed(1)}
-                <small>Illustrative rating</small>
+                📍 ${escapeHTML(locationDetails || "Location not provided")}
             </p>
 
             <div class="platform-comparison">
                 <div class="platform-row">
-                    <div class="platform-name">
-                        <span class="platform-mark swiggy"></span>
-                        <span>Swiggy</span>
-                    </div>
+                    <div class="platform-name">Price per kg</div>
                     <div class="platform-price">
-                        <strong>${formatPrice(food.swiggy)}</strong>
-                        <small>+ ${formatPrice(food.swiggyFee)} demo delivery fees</small>
-                        <small>Total: ${formatPrice(totalCost(food, "swiggy"))}</small>
+                        <strong>${formatPrice(item.price)}</strong>
+                        <small>Seller-provided demo price</small>
                     </div>
                 </div>
 
                 <div class="platform-row">
-                    <div class="platform-name">
-                        <span class="platform-mark zomato"></span>
-                        <span>Zomato</span>
-                    </div>
+                    <div class="platform-name">Available quantity</div>
                     <div class="platform-price">
-                        <strong>${formatPrice(food.zomato)}</strong>
-                        <small>+ ${formatPrice(food.zomatoFee)} demo fees</small>
-                        <small>Total: ${formatPrice(totalCost(food, "zomato"))}</small>
+                        <strong>${Number(item.quantity)} kg</strong>
                     </div>
                 </div>
             </div>
 
-            <div class="total-price">
-                <div class="total-line">
-                    <span>Lowest estimated total</span>
-                    <strong>${formatPrice(best.total)}</strong>
-                </div>
-                <p class="winner-label">
-                    ${best.name} · ${formatPrice(best.savings)} less in this demo
-                </p>
-            </div>
+            <p class="restaurant">
+                ${escapeHTML(
+        item.description || "Contact the farmer for details."
+    )}
+            </p>
 
-            <button class="review-button" type="button" aria-expanded="false">
-                <span>✳ View Review Insights</span>
-                <span class="review-arrow">＋</span>
+            ${validPhone
+            ? `
+                        <div class="farmer-contact-actions">
+                            <a
+                                class="review-button enquiry-button"
+                                href="tel:${phone}"
+                                aria-label="Call farmer ${escapeHTML(item.farmer)}"
+                            >
+                                📞 Call Farmer
+                            </a>
+
+                            <a
+                                class="review-button enquiry-button"
+                                href="https://wa.me/${whatsappNumber}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Contact farmer on WhatsApp"
+                            >
+                                WhatsApp
+                            </a>
+                        </div>
+                    `
+            : `
+                        <p class="restaurant">
+                            Contact number not available. Please use the enquiry option.
+                        </p>
+                    `
+        }
+
+            <button
+                class="review-button enquiry-button"
+                type="button"
+                data-id="${Number(item.id)}"
+                aria-label="Enquire about ${escapeHTML(item.name)}"
+            >
+                <span>✉ Enquire with Farmer</span>
+                <span aria-hidden="true">→</span>
             </button>
-
-            <div class="review-details">
-                ${food.review}
-                <strong>Illustrative example, not verified customer reviews or AI analysis.</strong>
-            </div>
         </article>
     `;
 }
 
-function renderFoods() {
-    const searchTerm = searchInput.value.trim().toLowerCase();
-    const budget = budgetFilter ? budgetFilter.value : "all";
+// ------------------------------------
+// 7. Search, filter and sort listings
+// ------------------------------------
 
-    const filteredFoods = foods.filter(food => {
-        const matchesSearch =
-            food.name.toLowerCase().includes(searchTerm) ||
-            food.restaurant.toLowerCase().includes(searchTerm) ||
-            food.category.toLowerCase().includes(searchTerm);
-
-        const matchesBudget =
-            budget === "all" ||
-            getBestPlatform(food).total < Number(budget);
-
-        return matchesSearch && matchesBudget;
-    });
-
-    if (sortSelect.value === "low") {
-        filteredFoods.sort((a, b) =>
-            getBestPlatform(a).total - getBestPlatform(b).total
+function renderProduce() {
+    if (!produceContainer) {
+        console.error(
+            'Could not find the element with id="foodContainer".'
         );
-    } else if (sortSelect.value === "high") {
-        filteredFoods.sort((a, b) =>
-            getBestPlatform(b).total - getBestPlatform(a).total
-        );
-    } else if (sortSelect.value === "rating") {
-        filteredFoods.sort((a, b) => b.rating - a.rating);
-    }
-
-    foodCount.textContent = String(filteredFoods.length).padStart(2, "0");
-    resultsLabel.textContent = `${filteredFoods.length} OPTIONS`;
-
-    searchButton.style.display = searchTerm ? "block" : "none";
-
-    const savingsElement = document.getElementById("totalSavings");
-    if (savingsElement) {
-        const savings = filteredFoods.reduce(
-            (sum, food) => sum + getBestPlatform(food).savings, 0
-        );
-        savingsElement.textContent = formatPrice(savings);
-    }
-
-    if (filteredFoods.length === 0) {
-        foodContainer.innerHTML = `
-            <div class="empty-state">
-                <strong>No food found</strong>
-                <p>Try another search or budget.</p>
-            </div>
-        `;
         return;
     }
 
-    foodContainer.innerHTML = filteredFoods.map(createFoodCard).join("");
+    // Refresh available locations before reading the selected location.
+    updateLocationOptions();
+
+    const searchTerm =
+        searchInput?.value.trim().toLowerCase() || "";
+
+    const category = categoryFilter?.value || "all";
+    const location = locationFilter?.value || "all";
+
+    let filtered = produce.filter(item => {
+        const searchableText = [
+            item.name,
+            item.farmer,
+            item.category,
+            item.location,
+            item.description
+        ].join(" ").toLowerCase();
+
+        const matchesSearch = searchableText.includes(searchTerm);
+
+        const matchesCategory =
+            category === "all" ||
+            normalizeCategory(item.category) ===
+            normalizeCategory(category);
+
+        const matchesLocation =
+            location === "all" ||
+            String(item.location ?? "").trim().toLowerCase() ===
+            location.trim().toLowerCase();
+
+        return matchesSearch && matchesCategory && matchesLocation;
+    });
+
+    // Sort by the selected price order.
+    const sort = sortSelect?.value || "low";
+
+    if (sort === "low") {
+        filtered.sort(
+            (a, b) => Number(a.price) - Number(b.price)
+        );
+    } else if (sort === "high") {
+        filtered.sort(
+            (a, b) => Number(b.price) - Number(a.price)
+        );
+    }
+
+    // Update the listing count.
+    if (produceCount) {
+        produceCount.textContent =
+            String(filtered.length).padStart(2, "0");
+    }
+
+    if (resultsLabel) {
+        resultsLabel.textContent =
+            `${filtered.length} PRODUCE LISTINGS`;
+    }
+
+    if (clearSearch) {
+        clearSearch.style.display =
+            searchTerm ? "block" : "none";
+    }
+
+    // Display a helpful message when nothing matches.
+    if (filtered.length === 0) {
+        produceContainer.innerHTML = `
+            <div class="empty-state">
+                <strong>No produce found</strong>
+                <p>
+                    Try a different crop name, category or location.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    // Display the matching produce cards.
+    produceContainer.innerHTML =
+        filtered.map(createProduceCard).join("");
 }
 
-searchInput.addEventListener("input", renderFoods);
-sortSelect.addEventListener("change", renderFoods);
-budgetFilter.addEventListener("change", renderFoods);
+// ------------------------------------
+// 8. Search and filter event listeners
+// ------------------------------------
 
-if (budgetFilter) {
-    budgetFilter.addEventListener("change", renderFoods);
-}
+searchInput?.addEventListener("input", renderProduce);
 
-searchButton.addEventListener("click", () => {
-    searchInput.value = "";
-    renderFoods();
-    searchInput.focus();
+sortSelect?.addEventListener("change", renderProduce);
+
+categoryFilter?.addEventListener("change", renderProduce);
+
+locationFilter?.addEventListener("change", renderProduce);
+
+clearSearch?.addEventListener("click", () => {
+    if (searchInput) {
+        searchInput.value = "";
+    }
+
+    renderProduce();
+    searchInput?.focus();
 });
 
-foodContainer.addEventListener("click", event => {
-    const button = event.target.closest(".review-button");
+// ------------------------------------
+// 9. Buyer enquiry demonstration
+// ------------------------------------
+
+produceContainer?.addEventListener("click", event => {
+    const button = event.target.closest(".enquiry-button");
+
     if (!button) return;
 
-    const details = button.nextElementSibling;
-    const opening = !details.classList.contains("visible");
+    const item = produce.find(
+        product => product.id === Number(button.dataset.id)
+    );
 
-    details.classList.toggle("visible", opening);
-    button.setAttribute("aria-expanded", String(opening));
-    button.querySelector(".review-arrow").textContent = opening ? "−" : "＋";
-    button.querySelector("span:first-child").textContent =
-        opening ? "✳ Hide Review Insights" : "✳ View Review Insights";
+    if (!item) return;
+
+    alert(
+        "Demo buyer enquiry\n\n" +
+        `Produce: ${item.name}\n` +
+        `Farmer: ${item.farmer}\n` +
+        `Price: ${formatPrice(item.price)} per kg\n` +
+        `Available quantity: ${item.quantity} kg\n` +
+        `Location: ${item.location}\n\n` +
+        "This is a prototype. Real messaging requires a backend."
+    );
 });
 
-renderFoods();
+
+// ------------------------------------
+// 10. Add a new farmer listing
+// ------------------------------------
+
+farmerForm?.addEventListener("submit", event => {
+    event.preventDefault();
+
+    const name =
+        document.getElementById("produceName")?.value.trim() || "";
+
+    const farmer =
+        document.getElementById("farmerName")?.value.trim() || "";
+
+    const category =
+        document.getElementById("produceCategory")?.value || "";
+
+    const price = Number(
+        document.getElementById("producePrice")?.value
+    );
+
+    const quantity = Number(
+        document.getElementById("produceQuantity")?.value
+    );
+
+    const location =
+        document.getElementById("farmerLocation")?.value.trim() || "";
+
+    const phone =
+        document.getElementById("farmerPhone")?.value.trim() || "";
+
+    const village =
+        document.getElementById("farmerVillage")?.value.trim() || "";
+
+    const district =
+        document.getElementById("farmerDistrict")?.value.trim() || "";
+
+    const description =
+        document.getElementById("produceDescription")?.value.trim() || "";
+
+    if (
+        !name ||
+        !farmer ||
+        !category ||
+        !location ||
+        !village ||
+        !district ||
+        !/^[6-9]\d{9}$/.test(phone) ||
+        !Number.isFinite(price) ||
+        price <= 0 ||
+        !Number.isFinite(quantity) ||
+        quantity <= 0
+    ) {
+        alert(
+            "Please enter valid details. Use a 10-digit Indian mobile number."
+        );
+        return;
+    }
+
+    const newItem = {
+        id: Date.now(),
+        name,
+        farmer,
+        category: normalizeCategory(category),
+        emoji: getEmoji(category),
+        price,
+        quantity,
+        location,
+        phone,
+        village,
+        district,
+        description
+    };
+
+    // Add and save the new listing.
+    produce.unshift(newItem);
+
+    if (!saveProduce()) {
+        produce.shift();
+        return;
+    }
+
+    farmerForm.reset();
+
+    // Clear existing filters to show the new listing.
+    if (searchInput) searchInput.value = "";
+    if (categoryFilter) categoryFilter.value = "all";
+    if (locationFilter) locationFilter.value = "all";
+    if (sortSelect) sortSelect.value = "low";
+
+    renderProduce();
+
+    alert("Your produce listing was added successfully!");
+});
+
+// ------------------------------------
+
+
+// ------------------------------------
+// 11. Start the application
+// ------------------------------------
+
+renderProduce();
