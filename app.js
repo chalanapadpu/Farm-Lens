@@ -496,35 +496,34 @@ farmerForm?.addEventListener("submit", event => {
 
     const phone =
         document.getElementById("farmerPhone")?.value.trim() || "";
-
-    const village =
-        document.getElementById("farmerVillage")?.value.trim() || "";
-
+    const village = location;
     const district =
         document.getElementById("farmerDistrict")?.value.trim() || "";
 
     const description =
         document.getElementById("produceDescription")?.value.trim() || "";
 
-    if (
-        !name ||
-        !farmer ||
-        !category ||
-        !location ||
-        !village ||
-        !district ||
-        !/^[6-9]\d{9}$/.test(phone) ||
-        !Number.isFinite(price) ||
-        price <= 0 ||
-        !Number.isFinite(quantity) ||
-        quantity <= 0
-    ) {
-        alert(
-            "Please enter valid details. Use a 10-digit Indian mobile number."
-        );
-        return;
+
+    const errors = [];
+
+    if (!name) errors.push("Produce name");
+    if (!farmer) errors.push("Farmer name");
+    if (!category) errors.push("Category");
+    if (!location) errors.push("Location");
+    if (!village) errors.push("Village");
+    if (!district) errors.push("District");
+    if (phone !== "" && !/^[6-9]\d{9}$/.test(phone)) {
+        errors.push("Valid 10-digit phone number");
+    }
+    if (!Number.isFinite(price) || price <= 0) errors.push("Price");
+    if (!Number.isFinite(quantity) || quantity <= 0) {
+        errors.push("Available quantity");
     }
 
+    if (errors.length > 0) {
+        alert("Please check these fields:\n" + errors.join("\n"));
+        return;
+    }
     const newItem = {
         id: Date.now(),
         name,

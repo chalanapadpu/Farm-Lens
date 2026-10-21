@@ -1218,3 +1218,132 @@ main,
     color: var(--muted);
     font-size: 10px;
 }
+
+/* FarmLens AI - Farmer Listing Form Layout */
+
+#produceForm {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 24px;
+    align-items: start;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Keep each label and input together */
+#produceForm .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    width: 100%;
+}
+
+#produceForm label {
+    display: block;
+    margin: 0;
+}
+
+#produceForm input,
+#produceForm select,
+#produceForm textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: 11px 12px;
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+#produceForm textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+#produceForm input::placeholder,
+#produceForm textarea::placeholder {
+    color: var(--muted);
+}
+
+/* Description uses the full row */
+#produceForm .form-group:has(textarea) {
+    grid-column: 1 / -1;
+}
+
+/* Submit button */
+#produceForm button {
+    width: fit-content;
+    max-width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    background: var(--green);
+    color: #10150f;
+    font-weight: 700;
+}
+
+/* Mobile screens */
+@media (max-width: 650px) {
+    #produceForm {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    #produceForm .form-group:has(textarea) {
+        grid-column: auto;
+    }
+
+    #produceForm button {
+        width: 100%;
+    }
+}
+
+/* Fix farmer form layout */
+#farmerForm {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px 24px !important;
+    align-items: start;
+    width: 100%;
+}
+
+#farmerForm label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#farmerForm input,
+#farmerForm select,
+#farmerForm textarea {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#farmerForm textarea {
+    min-height: 90px;
+}
+
+@media (max-width: 650px) {
+    #farmerForm {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Align the Contact Number field */
+#farmerForm input#farmerPhone {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+#farmerForm label[for="farmerPhone"] {
+    display: block;
+    margin: 0 0 5px;
+}
