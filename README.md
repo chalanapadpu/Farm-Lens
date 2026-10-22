@@ -66,7 +66,7 @@ FarmLens AI is a hackathon prototype. Produce listings are currently stored in b
 
 - GitHub Repository: https://github.com/chalanapadpu/Farm-Lens
 - Live Website: https://chalanapadpu.github.io/Farm-Lens/
-- Demo Video:
+- Demo Video: https://drive.google.com/file/d/1_5sae4TFZeRlPnjzvbYEJRJTQwOmQWdh/view?usp=sharing
 
 ---
 
